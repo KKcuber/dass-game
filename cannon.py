@@ -2,10 +2,8 @@ from GameObject import GameObject
 import time
 
 class Cannon(GameObject):
-    def __init__(self, posX, posY,char, color):
-        GameObject.__init__(self, posX, posY, char, 1, 1, color)
-        self.health = 30
-        self.maxhealth = 30
+    def __init__(self, posX, posY,char, color, health):
+        GameObject.__init__(self, posX, posY, char, 1, 1, color, health)
         self.lastAttack = time.time()
         self.cannonDamage = 10
 

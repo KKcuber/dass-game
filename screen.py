@@ -25,5 +25,7 @@ class Screen:
             for column in row:
                 printString += column
             printString += '\n'
-        printString += "King's Health: " + str(kingHealth)
+        printString += "King's Health: "
+        for i in range(int(kingHealth/10)):
+            printString += '|'
         sys.stdout.write(printString)

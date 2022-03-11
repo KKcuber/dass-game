@@ -1,7 +1,8 @@
+from email.base64mime import header_length
 import colorama as clr
 
 class GameObject:
-    def __init__(self, posX, posY, char, sizeX, sizeY, color):
+    def __init__(self, posX, posY, char, sizeX, sizeY, color, health):
         self.posX = posX
         self.posY = posY
         self.char = char
@@ -9,6 +10,8 @@ class GameObject:
         self.sizeX = sizeX
         self.sizeY = sizeY
         self.alive = True
+        self.health = health
+        self.maxHealth = health
 
     def draw(self, screen):
         for y in range(self.sizeY):
