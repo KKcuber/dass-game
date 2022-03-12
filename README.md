@@ -2,6 +2,14 @@
 
 - A Terminal Based game based on the popular game of Clash of Clans 
 
+### To run the game
+1. Go into the main directory where game.py is present
+2. Run game.py with the command `python game.py`
+
+### To run the replay
+1. Go into the main directory where the replay.py is present
+2. Run replay.py with the command `python replay.py`
+
 ## Features
 
 1. King 
