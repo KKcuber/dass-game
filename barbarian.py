@@ -19,7 +19,7 @@ class Barbarian(GameObject):
         self.attackTarget = False
         self.townHallPosition = None
 
-    def moveAndAttack(self, walls, townHall, cannon1, cannon2, huts, screen):
+    def moveAndAttack(self, walls, townHall, cannon1, cannon2, huts, screen, rageSpellActive):
         if(self.attackWall != None):
             self.attackWall.health -= self.attackdamage
             if(self.attackWall.health <= self.attackWall.maxHealth*2/3):

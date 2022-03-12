@@ -87,8 +87,10 @@ while(1):
         if(rageSpellTime == None):
             print('Rage Spell Activated', file=sys.stderr)
             rageSpellTime = time.time()
+            king.attackdamage = king.attackdamage * 2
             king.vel = 2
             for barbarian in barbarians:
+                barbarian.attackdamage = barbarian.attackdamage * 2
                 barbarian.vel = 2
 
     # Check if rage spell has finished
@@ -96,7 +98,9 @@ while(1):
         rageSpellTime = 0
         print('Rage Spell Deactivated', file=sys.stderr)
         king.vel = 1
+        king.attackdamage = king.attackdamage / 2
         for barbarian in barbarians:
+            barbarian.attackdamage = barbarian.attackdamage / 2
             barbarian.vel = 1
     
     # draw all elements
@@ -116,10 +120,14 @@ while(1):
         cannon1.attack(king, barbarians)
     if(cannon2.alive):
         cannon2.attack(king, barbarians)
+    flag = True
+    if(rageSpellTime == None or rageSpellTime == 0):
+        flag = False
     for barbarian in barbarians:
         if(barbarian.alive):
-            barbarian.moveAndAttack( walls, townHall, cannon1, cannon2, huts, screen)
-    king.move(inputchar, screen)
+            barbarian.moveAndAttack( walls, townHall, cannon1, cannon2, huts, screen, flag)
+    if(king.alive):
+        king.move(inputchar, screen, flag)
     if(time.time() - prevFrameTime > screen.frameTime):
         # print("hi", file=sys.stderr)
         os.system('clear')

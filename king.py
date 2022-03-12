@@ -8,19 +8,31 @@ class King(GameObject):
         self.vel = 1
         self.attackdamage = 10
 
-    def move(self, inputchar, screen):
+    def move(self, inputchar, screen, rageSpellActive):
         if(inputchar == 'w'):
             if(self.posY > 0 and screen.screenarr[self.posY - 1][self.posX] == ' '):
-                self.posY -= self.vel
+                if(rageSpellActive and screen.screenarr[self.posY - 2][self.posX] != ' '):
+                    self.posY -= 1
+                else:
+                    self.posY -= self.vel
         elif(inputchar == 's'):
             if(self.posY < screen.height - 1 and screen.screenarr[self.posY + 1][self.posX] == ' '):
-                self.posY += self.vel
+                if(rageSpellActive and screen.screenarr[self.posY + 2][self.posX] != ' '):
+                    self.posY += 1
+                else:
+                    self.posY += self.vel
         elif(inputchar == 'a'):
             if(self.posX > 0 and screen.screenarr[self.posY][self.posX - 1] == ' '):
-                self.posX -= self.vel
+                if(rageSpellActive and screen.screenarr[self.posY][self.posX - 2] != ' '):
+                    self.posX -= 1
+                else:
+                    self.posX -= self.vel
         elif(inputchar == 'd'):
             if(self.posX < screen.width - 1 and screen.screenarr[self.posY][self.posX + 1] == ' '):
-                self.posX += self.vel
+                if(rageSpellActive and screen.screenarr[self.posY][self.posX + 2] != ' '):
+                    self.posX += 1
+                else:
+                    self.posX += self.vel
 
     def attack(self, walls, townHall, cannon1, cannon2, huts):
         for hut in huts.hutsArray:
