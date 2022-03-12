@@ -8,6 +8,7 @@ from TownHall import TownHall
 from hut import Huts
 from cannon import Cannon
 from barbarian import Barbarian
+
 #    |
 #  --+-----> Y
 #    |
@@ -42,6 +43,13 @@ while(1):
     if(inputchar == '3' and numBarbarians < 10):
         barbarians.append(Barbarian(0, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
         numBarbarians += 1
+    # heal spell heals all troops - barbarians and king and increases health by 150% capped at max Health
+    if(inputchar == 'h'):
+        king.health = min(king.health + king.maxHealth/2, king.maxHealth)
+        for barbarian in barbarians:
+            barbarian.health = min(barbarian.health + barbarian.maxHealth/2, barbarian.maxHealth)
+    
+    # draw all elements
     king.draw(screen)
     walls.draw(screen)
     townHall.draw(screen)
@@ -50,6 +58,8 @@ while(1):
     cannon2.draw(screen)
     for barbarian in barbarians:
         barbarian.draw(screen)
+
+    # update all elements
     if(inputchar == ' '):
         king.attack(walls, townHall, cannon1, cannon2, huts)
     if(cannon1.alive):
