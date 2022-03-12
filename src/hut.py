@@ -1,4 +1,4 @@
-from GameObject import GameObject
+from src.GameObject import GameObject
 import random
 
 class Huts(GameObject):

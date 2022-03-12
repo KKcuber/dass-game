@@ -1,8 +1,8 @@
-from GameObject import GameObject
+from src.GameObject import GameObject
 import colorama as clr
 import sys
 
-from TownHall import TownHall
+from src.TownHall import TownHall
 
 def getWallIndex(x,y, walls):
     for wall in walls.wallsArray:

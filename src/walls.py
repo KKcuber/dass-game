@@ -1,4 +1,4 @@
-from GameObject import GameObject
+from src.GameObject import GameObject
 
 class Walls(GameObject):
     def __init__(self, char, color, health):

@@ -1,4 +1,4 @@
-from GameObject import GameObject
+from src.GameObject import GameObject
 import time
 import colorama as clr
 

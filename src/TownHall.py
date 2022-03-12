@@ -1,4 +1,4 @@
-from GameObject import GameObject
+from src.GameObject import GameObject
 
 class TownHall(GameObject):
     def __init__(self, posX, posY, color, health):

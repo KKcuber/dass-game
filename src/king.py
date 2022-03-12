@@ -1,5 +1,5 @@
-from GameObject import GameObject
-from input import *
+from src.GameObject import GameObject
+from src.input import *
 import colorama as clr
 
 class King(GameObject):

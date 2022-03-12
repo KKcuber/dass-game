@@ -1,13 +1,12 @@
-from matplotlib.pyplot import bar
-from screen import *
-from king import *
+from src.screen import *
+from src.king import *
 import colorama as clr
 import time
-from walls import Walls
-from TownHall import TownHall
-from hut import Huts
-from cannon import Cannon
-from barbarian import Barbarian
+from src.walls import Walls
+from src.TownHall import TownHall
+from src.hut import Huts
+from src.cannon import Cannon
+from src.barbarian import Barbarian
 import pickle as pkl
 
 #    |
@@ -43,7 +42,7 @@ def saveReplay():
     # ask user for filename
     filename = input("Enter filename for replay to be saved in: ")
     # open file
-    file = open(filename, 'wb')
+    file = open('replays/' + filename, 'wb')
     # save all printStrings
     pkl.dump(printStrings, file)
     # close file
@@ -78,7 +77,12 @@ while(1):
         screen.clear()
         os.system('clear')
         print('Game Over! You lost!')
-        exit()
+        print('\n\nPress q to quit or any other key to save replay\n\n')
+        if(input_to(Get()) == 'q'):
+            exit()
+        else:
+            saveReplay()
+            exit()
 
     # defeat
     allHutsDead = True
