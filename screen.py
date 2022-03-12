@@ -29,3 +29,4 @@ class Screen:
         for i in range(int(kingHealth/10)):
             printString += '|'
         sys.stdout.write(printString)
+        return printString

@@ -8,6 +8,7 @@ from TownHall import TownHall
 from hut import Huts
 from cannon import Cannon
 from barbarian import Barbarian
+import pickle as pkl
 
 #    |
 #  --+-----> X
@@ -18,6 +19,9 @@ from barbarian import Barbarian
 
 # clear terminal every time you start the game
 os.system('clear')
+
+# array for all printStrings
+printStrings = []
 
 # creating objects
 screen = Screen(80, 25)
@@ -33,6 +37,18 @@ prevFrameTime = time.time()
 barbarians = []
 numBarbarians = 0
 rageSpellTime = None
+
+# save replay function
+def saveReplay():
+    # ask user for filename
+    filename = input("Enter filename for replay to be saved in: ")
+    # open file
+    file = open(filename, 'wb')
+    # save all printStrings
+    pkl.dump(printStrings, file)
+    # close file
+    file.close()
+    print("Replay saved! UwU")
 
 #render loop
 while(1):
@@ -74,7 +90,12 @@ while(1):
         screen.clear()
         os.system('clear')
         print('Game Over! You Win!')
-        exit()
+        print('\n\nPress q to quit or any other key to save replay\n\n')
+        if(input_to(Get()) == 'q'):
+            exit()
+        else:
+            saveReplay()
+            exit()
 
     # heal spell heals all troops - barbarians and king and increases health by 150% capped at max Health
     if(inputchar == 'h'):
@@ -85,7 +106,6 @@ while(1):
     # rage spell - doubles damage and movement speed for 3 senconds
     if(inputchar == 'r'):
         if(rageSpellTime == None):
-            print('Rage Spell Activated', file=sys.stderr)
             rageSpellTime = time.time()
             king.attackdamage = king.attackdamage * 2
             king.vel = 2
@@ -96,7 +116,6 @@ while(1):
     # Check if rage spell has finished
     if(rageSpellTime != None and time.time() - rageSpellTime > 3 and rageSpellTime != 0):
         rageSpellTime = 0
-        print('Rage Spell Deactivated', file=sys.stderr)
         king.vel = 1
         king.attackdamage = king.attackdamage / 2
         for barbarian in barbarians:
@@ -131,6 +150,7 @@ while(1):
     if(time.time() - prevFrameTime > screen.frameTime):
         # print("hi", file=sys.stderr)
         os.system('clear')
-        screen.printScreen(king.health)
+        printString = screen.printScreen(king.health)
+        printStrings.append(printString)
         screen.clear()
         prevFrameTime = time.time()
