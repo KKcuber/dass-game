@@ -12,12 +12,12 @@ class Screen:
         self.width = width
         self.height = height
         self.screenarr = np.array([[' ' for x in range(width)] for y in range(height)], dtype=object)
+        self.state = 'running'
 
     def clear(self):
         self.screenarr = np.array([[' ' for x in range(self.width)] for y in range(self.height)], dtype=object) 
         # print("\033[%d;%dH" % (0, 0))
-        # os.system('clear')
-
+        # os.system('clear') 
 
     def printScreen(self, kingHealth):
         printString = ''
