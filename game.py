@@ -27,9 +27,9 @@ screen = Screen(80, 25)
 king = King(0, 0, 'K',1, 1, clr.Fore.BLUE, 100)
 walls = Walls('#', clr.Fore.GREEN, 30)
 huts = Huts('H', clr.Fore.GREEN, 60)
-townHall = TownHall(38, 12, clr.Fore.GREEN, 100)
-cannon1 = Cannon(33, 12, 'C', clr.Fore.GREEN, 60)
-cannon2 = Cannon(47, 17, 'C', clr.Fore.GREEN, 60)
+townHall = TownHall(38, 12, clr.Fore.GREEN, 200)
+cannon1 = Cannon(33, 12, 'C', clr.Fore.GREEN, 200)
+cannon2 = Cannon(47, 17, 'C', clr.Fore.GREEN, 200)
 
 # Useful variables
 prevFrameTime = time.time()
@@ -41,6 +41,8 @@ rageSpellTime = None
 def saveReplay():
     # ask user for filename
     filename = input("Enter filename for replay to be saved in: ")
+    if(filename == 'q'):
+        return
     # open file
     file = open('replays/' + filename, 'wb')
     # save all printStrings
@@ -54,13 +56,13 @@ while(1):
     inputchar = input_to(Get())
     if(inputchar == 'q'):
         break
-    if(inputchar == '1' and numBarbarians < 10):
+    if(inputchar == '1' and numBarbarians < 6):
         barbarians.append(Barbarian(79, 0, 'B', 1, 1, clr.Fore.BLUE, 30))
         numBarbarians += 1
-    if(inputchar == '2' and numBarbarians < 10):
+    if(inputchar == '2' and numBarbarians < 6):
         barbarians.append(Barbarian(79, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
         numBarbarians += 1
-    if(inputchar == '3' and numBarbarians < 10):
+    if(inputchar == '3' and numBarbarians < 6):
         barbarians.append(Barbarian(0, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
         numBarbarians += 1
 
@@ -78,11 +80,8 @@ while(1):
         os.system('clear')
         print('Game Over! You lost!')
         print('\n\nPress q to quit or any other key to save replay\n\n')
-        if(input_to(Get()) == 'q'):
-            exit()
-        else:
-            saveReplay()
-            exit()
+        saveReplay()
+        exit()
 
     # defeat
     allHutsDead = True
@@ -95,11 +94,8 @@ while(1):
         os.system('clear')
         print('Game Over! You Win!')
         print('\n\nPress q to quit or any other key to save replay\n\n')
-        if(input_to(Get()) == 'q'):
-            exit()
-        else:
-            saveReplay()
-            exit()
+        saveReplay()
+        exit()
 
     # heal spell heals all troops - barbarians and king and increases health by 150% capped at max Health
     if(inputchar == 'h'):
