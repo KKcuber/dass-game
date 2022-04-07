@@ -8,6 +8,7 @@ from src.hut import Huts
 from src.cannon import Cannon
 from src.barbarian import Barbarian
 import pickle as pkl
+from src.archer import *
 
 #    |
 #  --+-----> X
@@ -33,8 +34,10 @@ cannon2 = Cannon(47, 17, 'C', clr.Fore.GREEN, 200)
 
 # Useful variables
 prevFrameTime = time.time()
+archers = []
 barbarians = []
 numBarbarians = 0
+numArchers = 0
 rageSpellTime = None
 
 # save replay function
@@ -66,6 +69,17 @@ while(1):
         barbarians.append(Barbarian(0, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
         numBarbarians += 1
 
+    # spawn archers
+    if(inputchar == '4' and numArchers < 6):
+        archers.append(Archer(79, 0, 'A', 1, 1, clr.Fore.BLUE, 30))
+        numArchers += 1
+    if(inputchar == '5' and numArchers < 6):
+        archers.append(Archer(79, 24, 'A', 1, 1, clr.Fore.BLUE, 30))
+        numArchers += 1
+    if(inputchar == '6' and numArchers < 6):
+        archers.append(Archer(0, 24, 'A', 1, 1, clr.Fore.BLUE, 30))
+        numArchers += 1
+
     # check for game endings
     # game ending can be of 2 types - victory or defeat
     # if all king and barbarians die, then game ends in defeat
@@ -75,7 +89,12 @@ while(1):
         if(barbarian.alive):
             allBarbariansDead = False
             break
-    if(not king.alive and allBarbariansDead):
+    allArchersDead = True
+    for archer in archers:
+        if(archer.alive):
+            allArchersDead = False
+            break
+    if(not king.alive and allBarbariansDead and allArchersDead):
         screen.clear()
         os.system('clear')
         print('Game Over! You lost!')
@@ -102,6 +121,8 @@ while(1):
         king.health = min(king.health + king.maxHealth/2, king.maxHealth)
         for barbarian in barbarians:
             barbarian.health = min(barbarian.health + barbarian.maxHealth/2, barbarian.maxHealth)
+        for archer in archers:
+            archer.health = min(archer.health + archer.maxHealth/2, archer.maxHealth)
 
     # rage spell - doubles damage and movement speed for 3 senconds
     if(inputchar == 'r'):
@@ -112,6 +133,9 @@ while(1):
             for barbarian in barbarians:
                 barbarian.attackdamage = barbarian.attackdamage * 2
                 barbarian.vel = 2
+            for archer in archers:
+                archer.attackdamage = archer.attackdamage * 2
+                archer.vel = 2
 
     # Check if rage spell has finished
     if(rageSpellTime != None and time.time() - rageSpellTime > 3 and rageSpellTime != 0):
@@ -121,6 +145,9 @@ while(1):
         for barbarian in barbarians:
             barbarian.attackdamage = barbarian.attackdamage / 2
             barbarian.vel = 1
+        for archer in archers:
+            archer.attackdamage = archer.attackdamage / 2
+            archer.vel = 1
     
     # draw all elements
     king.draw(screen)
@@ -131,20 +158,25 @@ while(1):
     cannon2.draw(screen)
     for barbarian in barbarians:
         barbarian.draw(screen)
+    for archer in archers:
+        archer.draw(screen)
 
     # update all elements
     if(inputchar == ' '):
         king.attack(walls, townHall, cannon1, cannon2, huts)
     if(cannon1.alive):
-        cannon1.attack(king, barbarians)
+        cannon1.attack(king, barbarians, archers)
     if(cannon2.alive):
-        cannon2.attack(king, barbarians)
+        cannon2.attack(king, barbarians, archers)
     flag = True
     if(rageSpellTime == None or rageSpellTime == 0):
         flag = False
     for barbarian in barbarians:
         if(barbarian.alive):
             barbarian.moveAndAttack( walls, townHall, cannon1, cannon2, huts, screen, flag)
+    for archer in archers:
+        if(archer.alive):
+            archer.moveAndAttack( walls, townHall, cannon1, cannon2, huts, screen, flag)
     if(king.alive):
         king.move(inputchar, screen, flag)
     if(time.time() - prevFrameTime > screen.frameTime):
