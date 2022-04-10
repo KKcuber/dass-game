@@ -29,8 +29,7 @@ king = King(0, 0, 'K',1, 1, clr.Fore.BLUE, 100)
 walls = Walls('#', clr.Fore.GREEN, 30)
 huts = Huts('H', clr.Fore.GREEN, 60)
 townHall = TownHall(38, 12, clr.Fore.GREEN, 200)
-cannon1 = Cannon(33, 12, 'C', clr.Fore.GREEN, 200)
-cannon2 = Cannon(47, 17, 'C', clr.Fore.GREEN, 200)
+cannons = [Cannon(33, 12, 'C', clr.Fore.GREEN, 200), Cannon(47, 17, 'C', clr.Fore.GREEN, 200)]
 
 # Useful variables
 prevFrameTime = time.time()
@@ -108,7 +107,12 @@ while(1):
         if(hut.alive):
             allHutsDead = False
             break
-    if(allHutsDead and not cannon1.alive and not cannon2.alive and not townHall.alive):
+    allCannonsDead = True
+    for cannon in cannons:
+        if(cannon.alive):
+            allCannonsDead = False
+            break
+    if(allHutsDead and allCannonsDead and not townHall.alive):
         screen.clear()
         os.system('clear')
         print('Game Over! You Win!')
@@ -154,8 +158,8 @@ while(1):
     walls.draw(screen)
     townHall.draw(screen)
     huts.draw(screen)
-    cannon1.draw(screen)
-    cannon2.draw(screen)
+    for cannon in cannons:
+        cannon.draw(screen)
     for barbarian in barbarians:
         barbarian.draw(screen)
     for archer in archers:
@@ -163,20 +167,19 @@ while(1):
 
     # update all elements
     if(inputchar == ' '):
-        king.attack(walls, townHall, cannon1, cannon2, huts)
-    if(cannon1.alive):
-        cannon1.attack(king, barbarians, archers)
-    if(cannon2.alive):
-        cannon2.attack(king, barbarians, archers)
+        king.attack(walls, townHall, cannons, huts)
+    for cannon in cannons:
+        cannon.attack(king, barbarians, archers)
+
     flag = True
     if(rageSpellTime == None or rageSpellTime == 0):
         flag = False
     for barbarian in barbarians:
         if(barbarian.alive):
-            barbarian.moveAndAttack( walls, townHall, cannon1, cannon2, huts, screen, flag)
+            barbarian.moveAndAttack( walls, townHall, cannons, huts, screen, flag)
     for archer in archers:
         if(archer.alive):
-            archer.moveAndAttack( walls, townHall, cannon1, cannon2, huts, screen, flag)
+            archer.moveAndAttack( walls, townHall, cannons, huts, screen, flag)
     if(king.alive):
         king.move(inputchar, screen, flag)
     if(time.time() - prevFrameTime > screen.frameTime):

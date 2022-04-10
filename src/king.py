@@ -34,7 +34,7 @@ class King(GameObject):
                 else:
                     self.posX += self.vel
 
-    def attack(self, walls, townHall, cannon1, cannon2, huts):
+    def attack(self, walls, townHall, cannons, huts):
         for hut in huts.hutsArray:
             if(hut.alive and abs(self.posX - hut.posX) + abs(self.posY - hut.posY) <= 5):
                 hut.health -= self.attackdamage
@@ -57,7 +57,7 @@ class King(GameObject):
                     wall.alive = False
                     wall.color = clr.Fore.RESET
 
-        for cannon in [cannon1, cannon2]:
+        for cannon in cannons:
             if(cannon.alive and abs(self.posX - cannon.posX) + abs(self.posY - cannon.posY) <= 5):
                 cannon.health -= self.attackdamage
                 if(cannon.health <= cannon.maxHealth*2/3):

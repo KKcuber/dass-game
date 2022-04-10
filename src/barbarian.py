@@ -19,7 +19,7 @@ class Barbarian(GameObject):
         self.attackTarget = False
         self.townHallPosition = None
 
-    def moveAndAttack(self, walls, townHall, cannon1, cannon2, huts, screen, rageSpellActive):
+    def moveAndAttack(self, walls, townHall, cannons, huts, screen, rageSpellActive):
         if(self.attackWall != None):
             self.attackWall.health -= self.attackdamage
             if(self.attackWall.health <= self.attackWall.maxHealth*2/3):
@@ -60,7 +60,7 @@ class Barbarian(GameObject):
                                 self.townHallPosition = (x,y)
                                 minDistance = abs(self.posX - x) + abs(self.posY - y)
 
-                for cannon in [cannon1, cannon2]:
+                for cannon in cannons:
                     if(cannon.alive):
                         if(abs(self.posX - cannon.posX) + abs(self.posY - cannon.posY) < minDistance):
                             self.currentTarget = cannon

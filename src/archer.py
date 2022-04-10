@@ -6,13 +6,17 @@ from src.TownHall import TownHall
 
 def getWallIndex(x,y, walls):
     for wall in walls.wallsArray:
-        if(wall.posX == x and wall.posY == y):
+        if(wall.posX == x and wall.posY == y and wall.alive):
             return wall
+    return None
+
+def manhattanDistance(object1, object2):
+    return abs(object1.posX - object2.posX) + abs(object1.posY - object2.posY)
 
 class Archer(GameObject):
     def __init__(self, posX, posY, char, sizeX, sizeY, color, health):
         GameObject.__init__(self, posX, posY, char, sizeX, sizeY, color, health)
-        self.vel = 2
+        self.vel = 1
         self.attackdamage = 0.5
         self.currentTarget = None
         self.attackWall = None
@@ -20,7 +24,8 @@ class Archer(GameObject):
         self.townHallPosition = None
         self.range = 8
 
-    def moveAndAttack(self, walls, townHall, cannon1, cannon2, huts, screen, rageSpellActive):
+    def moveAndAttack(self, walls, townHall, cannons, huts, screen, rageSpellActive):
+        # if attacking a wall then decrease wall's health
         if(self.attackWall != None):
             self.attackWall.health -= self.attackdamage
             if(self.attackWall.health <= self.attackWall.maxHealth*2/3):
@@ -32,6 +37,8 @@ class Archer(GameObject):
                 self.attackWall.color = clr.Fore.RESET
                 self.attackWall.char = ' '
                 self.attackWall = None
+
+        # if attacking target then decrease target's health
         elif(self.attackTarget):
             self.currentTarget.health -= self.attackdamage
             if(self.currentTarget.health <= self.currentTarget.maxHealth*2/3):
@@ -43,6 +50,8 @@ class Archer(GameObject):
                 self.currentTarget.color = clr.Fore.RESET
                 self.currentTarget = None
                 self.attackTarget = False
+
+        # if not attacking then find nearest wall/hut/town hall according to manhattan distance or move towards target
         else:
             # if no target, then set current target to nearest wall/hut/town hall
             if(self.currentTarget == None or self.currentTarget.alive == False):
@@ -62,7 +71,7 @@ class Archer(GameObject):
                                 self.townHallPosition = (x,y)
                                 minDistance = abs(self.posX - x) + abs(self.posY - y)
 
-                for cannon in [cannon1, cannon2]:
+                for cannon in cannons:
                     if(cannon.alive):
                         if(abs(self.posX - cannon.posX) + abs(self.posY - cannon.posY) < minDistance):
                             self.currentTarget = cannon
@@ -70,36 +79,41 @@ class Archer(GameObject):
 
             # move towards target
             else:
-                if(self.posX != self.currentTarget.posX):
-                    if(self.posX > self.currentTarget.posX):
-                        if(screen.screenarr[self.posY][self.posX - self.vel] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
-                            self.posX -= self.vel
-                        elif(self.posX - self.currentTarget.posX <= self.range):
-                            self.attackTarget = True
-                        elif(screen.screenarr[self.posY][self.posX - self.vel][5] == '#' or screen.screenarr[self.posY][self.posX - self.vel+1][5] == '#'):
-                            self.attackWall = getWallIndex(self.posX - self.vel, self.posY, walls)
-                    else:
-                        if(screen.screenarr[self.posY][self.posX + self.vel] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
+                if(manhattanDistance(self, self.currentTarget) > self.range):
+                    if(self.posX < self.currentTarget.posX):
+                        for i in range(self.posX, self.currentTarget.posX):
+                            if(getWallIndex(i, self.posY, walls) != None):
+                                self.posX = i - 1
+                                self.attackWall = getWallIndex(i, self.posY, walls)
+                                break
+                        if(self.attackWall == None):
                             self.posX += self.vel
-                        elif(self.posX + self.currentTarget.posX >= self.range):
-                            self.attackTarget = True
-                        elif(screen.screenarr[self.posY][self.posX + self.vel][5] == '#' or screen.screenarr[self.posY][self.posX + self.vel -1][5] == '#'):
-                            self.attackWall = getWallIndex(self.posX + self.vel, self.posY, walls)
-                elif(self.posY != self.currentTarget.posY):
-                    if(self.posY > self.currentTarget.posY):
-                        if(screen.screenarr[self.posY - self.vel][self.posX] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
-                            self.posY -= self.vel
-                        elif(self.posY - self.currentTarget.posY <= self.range):
-                            self.attackTarget = True
-                        elif(screen.screenarr[self.posY - self.vel][self.posX][5] == '#' or screen.screenarr[self.posY - self.vel +1][self.posX][5] == '#'):
-                            self.attackWall = getWallIndex(self.posX, self.posY - self.vel, walls)
-                    else:
-                        if(screen.screenarr[self.posY + self.vel][self.posX] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
+                    elif(self.posX > self.currentTarget.posX):
+                        for i in range(self.posX, self.currentTarget.posX, -1):
+                            if(getWallIndex(i, self.posY, walls) != None):
+                                self.posX = i + 1
+                                self.attackWall = getWallIndex(i, self.posY, walls)
+                                break
+                        if(self.attackWall == None):
+                            self.posX -= self.vel
+                    elif(self.posY < self.currentTarget.posY):
+                        for i in range(self.posY, self.currentTarget.posY):
+                            if(getWallIndex(self.posX, i, walls) != None):
+                                self.posY = i - 1
+                                self.attackWall = getWallIndex(self.posX, i, walls)
+                                break
+                        if(self.attackWall == None):
                             self.posY += self.vel
-                        elif(self.posY + self.currentTarget.posY >= self.range):
-                            self.attackTarget = True
-                        elif(screen.screenarr[self.posY + self.vel][self.posX][5] == '#' or screen.screenarr[self.posY + self.vel -1][self.posX][5] == '#'):
-                            self.attackWall = getWallIndex(self.posX, self.posY + self.vel, walls)
+                    elif(self.posY > self.currentTarget.posY):
+                        for i in range(self.posY, self.currentTarget.posY, -1):
+                            if(getWallIndex(self.posX, i, walls) != None):
+                                self.posY = i + 1
+                                self.attackWall = getWallIndex(self.posX, i, walls)
+                                break
+                        if(self.attackWall == None):
+                            self.posY -= self.vel
+                else:
+                    self.attackTarget = True
             # else:
             #     self.currentTarget.health -= self.attackdamage
             #     if(self.currentTarget.health <= self.currentTarget.maxHealth*2/3):
