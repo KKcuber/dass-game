@@ -9,6 +9,7 @@ from src.cannon import Cannon
 from src.barbarian import Barbarian
 import pickle as pkl
 from src.archer import *
+from src.balloon import *
 
 #    |
 #  --+-----> X
@@ -25,7 +26,6 @@ printStrings = []
 
 # creating objects
 screen = Screen(80, 25)
-king = King(0, 0, 'K',1, 1, clr.Fore.BLUE, 100)
 walls = Walls('#', clr.Fore.GREEN, 30)
 huts = Huts('H', clr.Fore.GREEN, 60)
 townHall = TownHall(38, 12, clr.Fore.GREEN, 200)
@@ -35,6 +35,8 @@ cannons = [Cannon(33, 12, 'C', clr.Fore.GREEN, 200), Cannon(47, 17, 'C', clr.For
 prevFrameTime = time.time()
 archers = []
 barbarians = []
+balloons = []
+numBalloons = 0
 numBarbarians = 0
 numArchers = 0
 rageSpellTime = None
@@ -52,6 +54,16 @@ def saveReplay():
     # close file
     file.close()
     print("Replay saved! UwU")
+
+print("Welcome to the game!")
+print("Which character do you want to play?")
+print("1. King")
+print("2. Archer Queen")
+print("Enter 1 or 2: ")
+choice = input()
+if(choice == '1'):
+    king = King(0, 0, 'K',1, 1, clr.Fore.BLUE, 100)
+
 
 #render loop
 while(1):
@@ -79,6 +91,17 @@ while(1):
         archers.append(Archer(0, 24, 'A', 1, 1, clr.Fore.BLUE, 30))
         numArchers += 1
 
+    # spawn balloons
+    if(inputchar == '7' and numBalloons < 6):
+        balloons.append(Balloon(79, 0, 'B', 1, 1, clr.Fore.BLUE, 30))
+        numBalloons += 1
+    if(inputchar == '8' and numBalloons < 6):
+        balloons.append(Balloon(79, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
+        numBalloons += 1
+    if(inputchar == '9' and numBalloons < 6):
+        balloons.append(Balloon(0, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
+        numBalloons += 1
+
     # check for game endings
     # game ending can be of 2 types - victory or defeat
     # if all king and barbarians die, then game ends in defeat
@@ -93,7 +116,12 @@ while(1):
         if(archer.alive):
             allArchersDead = False
             break
-    if(not king.alive and allBarbariansDead and allArchersDead):
+    allBalloonsDead = True
+    for balloon in balloons:
+        if(balloon.alive):
+            allBalloonsDead = False
+            break
+    if(not king.alive and allBarbariansDead and allArchersDead and allBalloonsDead):
         screen.clear()
         os.system('clear')
         print('Game Over! You lost!')
@@ -140,6 +168,9 @@ while(1):
             for archer in archers:
                 archer.attackdamage = archer.attackdamage * 2
                 archer.vel = 2
+            for balloon in balloons:
+                balloon.attackdamage = balloon.attackdamage * 2
+                balloon.vel = 2
 
     # Check if rage spell has finished
     if(rageSpellTime != None and time.time() - rageSpellTime > 3 and rageSpellTime != 0):
@@ -152,6 +183,9 @@ while(1):
         for archer in archers:
             archer.attackdamage = archer.attackdamage / 2
             archer.vel = 1
+        for balloon in balloons:
+            balloon.attackdamage = balloon.attackdamage / 2
+            balloon.vel = 1
     
     # draw all elements
     king.draw(screen)
@@ -164,6 +198,8 @@ while(1):
         barbarian.draw(screen)
     for archer in archers:
         archer.draw(screen)
+    for balloon in balloons:
+        balloon.draw(screen)
 
     # update all elements
     if(inputchar == ' '):
@@ -180,6 +216,9 @@ while(1):
     for archer in archers:
         if(archer.alive):
             archer.moveAndAttack( walls, townHall, cannons, huts, screen, flag)
+    for balloon in balloons:
+        if(balloon.alive):
+            balloon.moveAndAttack( walls, townHall, cannons, huts, screen, flag)
     if(king.alive):
         king.move(inputchar, screen, flag)
     if(time.time() - prevFrameTime > screen.frameTime):
