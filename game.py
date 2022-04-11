@@ -10,6 +10,7 @@ from src.barbarian import Barbarian
 import pickle as pkl
 from src.archer import *
 from src.balloon import *
+from src.queen import *
 
 #    |
 #  --+-----> X
@@ -63,6 +64,8 @@ print("Enter 1 or 2: ")
 choice = input()
 if(choice == '1'):
     king = King(0, 0, 'K',1, 1, clr.Fore.BLUE, 100)
+else:
+    king = Queen(0, 0, 'Q',1, 1, clr.Fore.BLUE, 100)
 
 
 #render loop
@@ -203,9 +206,11 @@ while(1):
 
     # update all elements
     if(inputchar == ' '):
-        king.attack(walls, townHall, cannons, huts)
+        if(king.alive):
+            king.attack(walls, townHall, cannons, huts)
     for cannon in cannons:
-        cannon.attack(king, barbarians, archers)
+        if(cannon.alive):
+            cannon.attack(king, barbarians, archers)
 
     flag = True
     if(rageSpellTime == None or rageSpellTime == 0):
