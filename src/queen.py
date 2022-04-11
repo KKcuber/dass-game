@@ -54,8 +54,6 @@ class Queen(GameObject):
 
     def attack(self, walls, townHall, cannons, huts, wizardTowers):
         attackCenter = self.findAttackPosition()
-        print(attackCenter, file=sys.stderr)
-        print(self.lastMoved, file=sys.stderr)
         for hut in huts.hutsArray:
             if(euclideanDistance(hut.posX, hut.posY, attackCenter[0], attackCenter[1]) <= 2.9):
                 hut.health -= self.attackdamage

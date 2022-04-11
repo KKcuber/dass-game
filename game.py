@@ -239,7 +239,6 @@ while(1):
     if(king.alive):
         king.move(inputchar, screen, flag)
     if(time.time() - prevFrameTime > screen.frameTime):
-        # print("hi", file=sys.stderr)
         os.system('clear')
         printString = screen.printScreen(king.health)
         printStrings.append(printString)

@@ -33,7 +33,6 @@ class WizardTower(GameObject):
                 self.currentTarget = king
                 minDistance = abs(self.posX - king.posX) + abs(self.posY - king.posY)
             if(minDistance <= 6):
-                print('Wizard Tower attacks!', file=sys.stderr)
                 for barbarian in barbarians:
                     if(euclideanDistance(barbarian.posX, barbarian.posY, self.currentTarget.posX, self.currentTarget.posY) < 1.8):
                         barbarian.health -= self.damage
