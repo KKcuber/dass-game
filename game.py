@@ -43,6 +43,7 @@ numBalloons = 0
 numBarbarians = 0
 numArchers = 0
 rageSpellTime = None
+level = 1
 
 # save replay function
 def saveReplay():
@@ -151,12 +152,38 @@ while(1):
             allWizardTowersDead = False
             break
     if(allWizardTowersDead and allHutsDead and allCannonsDead and not townHall.alive):
-        screen.clear()
-        os.system('clear')
-        print('Game Over! You Win!')
-        print('\n\nPress q to quit or any other key to save replay\n\n')
-        saveReplay()
-        exit()
+        level = level+1
+        numArchers = 0
+        numBarbarians = 0
+        numBalloons = 0
+        balloons.clear()
+        archers.clear()
+        barbarians.clear()
+        for hut in huts.hutsArray:
+            hut.alive = True
+        for cannon in cannons:
+            cannon.alive = True
+        for wizardTower in wizardTowers:
+            wizardTower.alive = True
+        townHall.alive = True
+        king.alive = True
+        king.health = king.maxHealth
+        king.posX = 0
+        king.posY = 0
+        walls.revive()
+        if(level == 2):
+            cannons.append(Cannon(39,9, 'C', clr.Fore.GREEN, 200))
+            wizardTowers.append(WizardTower(32, 17, 'W', clr.Fore.GREEN, 200))
+        if(level == 3):
+            cannons.append(Cannon(34, 15, 'C', clr.Fore.GREEN, 200))
+            wizardTowers.append(WizardTower(40, 13, 'W', clr.Fore.GREEN, 200))
+        if(level == 4):
+            screen.clear()
+            os.system('clear')
+            print('Game Over! You Win!')
+            print('\n\nPress q to quit or any other key to save replay\n\n')
+            saveReplay()
+            exit()
 
     # heal spell heals all troops - barbarians and king and increases health by 150% capped at max Health
     if(inputchar == 'h'):
@@ -200,6 +227,9 @@ while(1):
     # draw all elements
     king.draw(screen)
     walls.draw(screen)
+    for wallsss in walls.wallsArray:
+        print(wallsss.alive, file=sys.stderr)
+    print("--------------------", file=sys.stderr)
     townHall.draw(screen)
     huts.draw(screen)
     for wizardTower in wizardTowers:

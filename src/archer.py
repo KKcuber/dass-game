@@ -35,7 +35,7 @@ class Archer(GameObject):
             if(self.attackWall.health <= 0):
                 self.attackWall.alive = False
                 self.attackWall.color = clr.Fore.RESET
-                self.attackWall.char = ' '
+                # self.attackWall.char = ' '
                 self.attackWall = None
 
         # if attacking target then decrease target's health

@@ -1,5 +1,5 @@
 from src.GameObject import GameObject
-
+import colorama as clr
 class Walls(GameObject):
     def __init__(self, char, color, health):
         self.wallsArray = []
@@ -12,3 +12,9 @@ class Walls(GameObject):
         for wall in self.wallsArray:
             if(wall.alive):
                 wall.draw(screen)
+    
+    def revive(self):
+        for wall in self.wallsArray:
+            wall.alive = True
+            wall.color = clr.Fore.GREEN
+            wall.health = 30
