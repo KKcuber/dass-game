@@ -2,6 +2,8 @@ from src.GameObject import GameObject
 from src.input import *
 import colorama as clr
 
+def euclideanDistance(x1, y1, x2, y2):
+    return ((x1-x2)**2 + (y1-y2)**2)**0.5
 class Queen(GameObject):
     def __init__(self, posX, posY, char, sizeX, sizeY, color, health):
         GameObject.__init__(self, posX, posY, char, sizeX, sizeY, color, health)
@@ -55,7 +57,7 @@ class Queen(GameObject):
         print(attackCenter, file=sys.stderr)
         print(self.lastMoved, file=sys.stderr)
         for hut in huts.hutsArray:
-            if(hut.alive and abs(attackCenter[0] - hut.posX) + abs(attackCenter[1] - hut.posY) <= self.range):
+            if(euclideanDistance(hut.posX, hut.posY, attackCenter[0], attackCenter[1]) <= 2.9):
                 hut.health -= self.attackdamage
                 if(hut.health <= hut.maxHealth*2/3):
                     hut.color = clr.Fore.YELLOW
@@ -66,7 +68,7 @@ class Queen(GameObject):
                     hut.color = clr.Fore.RESET
 
         for wall in walls.wallsArray:
-            if(wall.alive and abs(attackCenter[0] - wall.posX) + abs(attackCenter[1] - wall.posY) <= self.range):
+            if(wall.alive and euclideanDistance(wall.posX, wall.posY, attackCenter[0], attackCenter[1]) <= 2.9):
                 wall.health -= self.attackdamage
                 if(wall.health <= wall.maxHealth*2/3):
                     wall.color = clr.Fore.YELLOW
@@ -77,7 +79,7 @@ class Queen(GameObject):
                     wall.color = clr.Fore.RESET
 
         for cannon in cannons:
-            if(cannon.alive and abs(attackCenter[0] - cannon.posX) + abs(attackCenter[1] - cannon.posY) <= self.range):
+            if(cannon.alive and euclideanDistance(cannon.posX, cannon.posY, attackCenter[0], attackCenter[1]) <= 2.9):
                 cannon.health -= self.attackdamage
                 if(cannon.health <= cannon.maxHealth*2/3):
                     cannon.color = clr.Fore.YELLOW
@@ -88,7 +90,7 @@ class Queen(GameObject):
                     cannon.color = clr.Fore.RESET
 
         for wizardTower in wizardTowers:
-            if(wizardTower.alive and abs(attackCenter[0] - wizardTower.posX) + abs(attackCenter[1] - wizardTower.posY) <= self.range):
+            if(wizardTower.alive and euclideanDistance(wizardTower.posX, wizardTower.posY, attackCenter[0], attackCenter[1]) <= 2.9):
                 wizardTower.health -= self.attackdamage
                 if(wizardTower.health <= wizardTower.maxHealth*2/3):
                     wizardTower.color = clr.Fore.YELLOW
