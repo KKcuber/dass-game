@@ -17,7 +17,7 @@ class Balloon(GameObject):
         self.townHallPosition = None
         self.range = 1
 
-    def moveAndAttack(self, walls, townHall, cannons, huts, screen, rageSpellActive):
+    def moveAndAttack(self, walls, townHall, cannons, huts, screen, rageSpellActive, wizardTowers):
         # if attacking target then decrease target's health
         if(self.attackTarget):
             self.currentTarget.health -= self.attackdamage
@@ -43,6 +43,12 @@ class Balloon(GameObject):
                             self.currentTarget = cannon
                             minDistance = abs(self.posX - cannon.posX) + abs(self.posY - cannon.posY)
 
+                for wizardTower in wizardTowers:
+                    if(wizardTower.alive):
+                        if(abs(self.posX - wizardTower.posX) + abs(self.posY - wizardTower.posY) < minDistance):
+                            self.currentTarget = wizardTower
+                            minDistance = abs(self.posX - wizardTower.posX) + abs(self.posY - wizardTower.posY)
+                            
                 goto = True
                 # Balloon prioritizes to attack defensive buildings first, so it will go through defensive buildings first
                 if(self.currentTarget != None):

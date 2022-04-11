@@ -11,6 +11,7 @@ import pickle as pkl
 from src.archer import *
 from src.balloon import *
 from src.queen import *
+from src.wizardTower import *
 
 #    |
 #  --+-----> X
@@ -31,6 +32,7 @@ walls = Walls('#', clr.Fore.GREEN, 30)
 huts = Huts('H', clr.Fore.GREEN, 60)
 townHall = TownHall(38, 12, clr.Fore.GREEN, 200)
 cannons = [Cannon(33, 12, 'C', clr.Fore.GREEN, 200), Cannon(47, 17, 'C', clr.Fore.GREEN, 200)]
+wizardTowers = [WizardTower(36, 10, 'W', clr.Fore.GREEN, 200), WizardTower(44, 18, 'W', clr.Fore.GREEN, 200)]
 
 # Useful variables
 prevFrameTime = time.time()
@@ -96,13 +98,13 @@ while(1):
 
     # spawn balloons
     if(inputchar == '7' and numBalloons < 6):
-        balloons.append(Balloon(79, 0, 'B', 1, 1, clr.Fore.BLUE, 30))
+        balloons.append(Balloon(79, 0, 'O', 1, 1, clr.Fore.BLUE, 30))
         numBalloons += 1
     if(inputchar == '8' and numBalloons < 6):
-        balloons.append(Balloon(79, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
+        balloons.append(Balloon(79, 24, 'O', 1, 1, clr.Fore.BLUE, 30))
         numBalloons += 1
     if(inputchar == '9' and numBalloons < 6):
-        balloons.append(Balloon(0, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
+        balloons.append(Balloon(0, 24, 'O', 1, 1, clr.Fore.BLUE, 30))
         numBalloons += 1
 
     # check for game endings
@@ -143,7 +145,12 @@ while(1):
         if(cannon.alive):
             allCannonsDead = False
             break
-    if(allHutsDead and allCannonsDead and not townHall.alive):
+    allWizardTowersDead = True
+    for wizardTower in wizardTowers:
+        if(wizardTower.alive):
+            allWizardTowersDead = False
+            break
+    if(allWizardTowersDead and allHutsDead and allCannonsDead and not townHall.alive):
         screen.clear()
         os.system('clear')
         print('Game Over! You Win!')
@@ -195,6 +202,8 @@ while(1):
     walls.draw(screen)
     townHall.draw(screen)
     huts.draw(screen)
+    for wizardTower in wizardTowers:
+        wizardTower.draw(screen)
     for cannon in cannons:
         cannon.draw(screen)
     for barbarian in barbarians:
@@ -207,23 +216,26 @@ while(1):
     # update all elements
     if(inputchar == ' '):
         if(king.alive):
-            king.attack(walls, townHall, cannons, huts)
+            king.attack(walls, townHall, cannons, huts, wizardTowers)
     for cannon in cannons:
         if(cannon.alive):
             cannon.attack(king, barbarians, archers)
+    for wizardTower in wizardTowers:
+        if(wizardTower.alive):
+            wizardTower.attack(king, barbarians, archers, balloons)
 
     flag = True
     if(rageSpellTime == None or rageSpellTime == 0):
         flag = False
     for barbarian in barbarians:
         if(barbarian.alive):
-            barbarian.moveAndAttack( walls, townHall, cannons, huts, screen, flag)
+            barbarian.moveAndAttack( walls, townHall, cannons, huts, screen, flag, wizardTowers)
     for archer in archers:
         if(archer.alive):
-            archer.moveAndAttack( walls, townHall, cannons, huts, screen, flag)
+            archer.moveAndAttack( walls, townHall, cannons, huts, screen, flag, wizardTowers)
     for balloon in balloons:
         if(balloon.alive):
-            balloon.moveAndAttack( walls, townHall, cannons, huts, screen, flag)
+            balloon.moveAndAttack( walls, townHall, cannons, huts, screen, flag, wizardTowers)
     if(king.alive):
         king.move(inputchar, screen, flag)
     if(time.time() - prevFrameTime > screen.frameTime):

@@ -50,7 +50,7 @@ class Queen(GameObject):
                 else:
                     self.posX += self.vel
 
-    def attack(self, walls, townHall, cannons, huts):
+    def attack(self, walls, townHall, cannons, huts, wizardTowers):
         attackCenter = self.findAttackPosition()
         print(attackCenter, file=sys.stderr)
         print(self.lastMoved, file=sys.stderr)
@@ -86,6 +86,17 @@ class Queen(GameObject):
                 if(cannon.health <= 0):
                     cannon.alive = False
                     cannon.color = clr.Fore.RESET
+
+        for wizardTower in wizardTowers:
+            if(wizardTower.alive and abs(attackCenter[0] - wizardTower.posX) + abs(attackCenter[1] - wizardTower.posY) <= self.range):
+                wizardTower.health -= self.attackdamage
+                if(wizardTower.health <= wizardTower.maxHealth*2/3):
+                    wizardTower.color = clr.Fore.YELLOW
+                if(wizardTower.health <= wizardTower.maxHealth/3):
+                    wizardTower.color = clr.Fore.RED
+                if(wizardTower.health <= 0):
+                    wizardTower.alive = False
+                    wizardTower.color = clr.Fore.RESET
 
         for x in range(townHall.posX, townHall.posX + townHall.sizeX):
             for y in range(townHall.posY, townHall.posY + townHall.sizeY):

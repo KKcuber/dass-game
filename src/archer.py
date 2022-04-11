@@ -24,7 +24,7 @@ class Archer(GameObject):
         self.townHallPosition = None
         self.range = 8
 
-    def moveAndAttack(self, walls, townHall, cannons, huts, screen, rageSpellActive):
+    def moveAndAttack(self, walls, townHall, cannons, huts, screen, rageSpellActive, wizardTowers):
         # if attacking a wall then decrease wall's health
         if(self.attackWall != None):
             self.attackWall.health -= self.attackdamage
@@ -77,6 +77,11 @@ class Archer(GameObject):
                             self.currentTarget = cannon
                             minDistance = abs(self.posX - cannon.posX) + abs(self.posY - cannon.posY)
 
+                for wizardTower in wizardTowers:
+                    if(wizardTower.alive):
+                        if(abs(self.posX - wizardTower.posX) + abs(self.posY - wizardTower.posY) < minDistance):
+                            self.currentTarget = wizardTower
+                            minDistance = abs(self.posX - wizardTower.posX) + abs(self.posY - wizardTower.posY)
             # move towards target
             else:
                 if(manhattanDistance(self, self.currentTarget) > self.range):
