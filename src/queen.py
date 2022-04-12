@@ -22,6 +22,16 @@ class Queen(GameObject):
         elif(self.lastMoved == 'right'):
             return (self.posX + 8, self.posY)
 
+    def findAttackPositionForQueenSpecialAttack(self):
+        if(self.lastMoved == 'up'):
+            return (self.posX, self.posY - 16)
+        elif(self.lastMoved == 'down'):
+            return (self.posX, self.posY + 16)
+        elif(self.lastMoved == 'left'):
+            return (self.posX - 16, self.posY)
+        elif(self.lastMoved == 'right'):
+            return (self.posX + 16, self.posY)
+
     def move(self, inputchar, screen, rageSpellActive):
         if(inputchar == 'w'):
             self.lastMoved = 'up'
@@ -55,7 +65,7 @@ class Queen(GameObject):
     def attack(self, walls, townHall, cannons, huts, wizardTowers):
         attackCenter = self.findAttackPosition()
         for hut in huts.hutsArray:
-            if(euclideanDistance(hut.posX, hut.posY, attackCenter[0], attackCenter[1]) <= 2.9):
+            if(hut.alive and abs(hut.posX - attackCenter[0]) <= 2 and abs(hut.posY - attackCenter[1]) <= 2):
                 hut.health -= self.attackdamage
                 if(hut.health <= hut.maxHealth*2/3):
                     hut.color = clr.Fore.YELLOW
@@ -66,7 +76,7 @@ class Queen(GameObject):
                     hut.color = clr.Fore.RESET
 
         for wall in walls.wallsArray:
-            if(wall.alive and euclideanDistance(wall.posX, wall.posY, attackCenter[0], attackCenter[1]) <= 2.9):
+            if(wall.alive and abs(wall.posX - attackCenter[0]) <= 2 and abs(wall.posY - attackCenter[1]) <= 2):
                 wall.health -= self.attackdamage
                 if(wall.health <= wall.maxHealth*2/3):
                     wall.color = clr.Fore.YELLOW
@@ -77,7 +87,7 @@ class Queen(GameObject):
                     wall.color = clr.Fore.RESET
 
         for cannon in cannons:
-            if(cannon.alive and euclideanDistance(cannon.posX, cannon.posY, attackCenter[0], attackCenter[1]) <= 2.9):
+            if(cannon.alive and abs(cannon.posX - attackCenter[0]) <= 2 and abs(cannon.posY - attackCenter[1]) <= 2):
                 cannon.health -= self.attackdamage
                 if(cannon.health <= cannon.maxHealth*2/3):
                     cannon.color = clr.Fore.YELLOW
@@ -88,7 +98,7 @@ class Queen(GameObject):
                     cannon.color = clr.Fore.RESET
 
         for wizardTower in wizardTowers:
-            if(wizardTower.alive and euclideanDistance(wizardTower.posX, wizardTower.posY, attackCenter[0], attackCenter[1]) <= 2.9):
+            if(wizardTower.alive and abs(wizardTower.posX - attackCenter[0]) <= 2 and abs(wizardTower.posY - attackCenter[1]) <= 2):
                 wizardTower.health -= self.attackdamage
                 if(wizardTower.health <= wizardTower.maxHealth*2/3):
                     wizardTower.color = clr.Fore.YELLOW
@@ -100,8 +110,65 @@ class Queen(GameObject):
 
         for x in range(townHall.posX, townHall.posX + townHall.sizeX):
             for y in range(townHall.posY, townHall.posY + townHall.sizeY):
-                if(townHall.alive and abs(attackCenter[0]- x) + abs(attackCenter[1] - y) <= 5):
+                if(townHall.alive and abs(x - attackCenter[0]) <= 2 and abs(y - attackCenter[1]) <= 2):
                     townHall.health -= self.attackdamage
+                    if(townHall.health <= townHall.maxHealth*2/3):
+                        townHall.color = clr.Fore.YELLOW
+                    if(townHall.health <= townHall.maxHealth/3):
+                        townHall.color = clr.Fore.RED
+                    if(townHall.health <= 0):
+                        townHall.alive = False
+                        townHall.color = clr.Fore.RESET
+        
+    def specialAttack(self, walls, townHall, cannons, huts, wizardTowers, attackCenter):
+        for hut in huts.hutsArray:
+            if(hut.alive and abs(hut.posX - attackCenter[0]) <= 4 and abs(hut.posY - attackCenter[1]) <= 4):
+                hut.health -= 2*self.attackdamage
+                if(hut.health <= hut.maxHealth*2/3):
+                    hut.color = clr.Fore.YELLOW
+                if(hut.health <= hut.maxHealth/3):
+                    hut.color = clr.Fore.RED
+                if(hut.health <= 0):
+                    hut.alive = False
+                    hut.color = clr.Fore.RESET
+
+        for wall in walls.wallsArray:
+            if(wall.alive and abs(wall.posX - attackCenter[0]) <= 4 and abs(wall.posY - attackCenter[1]) <= 4):
+                wall.health -= 2*self.attackdamage
+                if(wall.health <= wall.maxHealth*2/3):
+                    wall.color = clr.Fore.YELLOW
+                if(wall.health <= wall.maxHealth/3):
+                    wall.color = clr.Fore.RED
+                if(wall.health <= 0):
+                    wall.alive = False
+                    wall.color = clr.Fore.RESET
+
+        for cannon in cannons:
+            if(cannon.alive and abs(cannon.posX - attackCenter[0]) <= 4 and abs(cannon.posY - attackCenter[1]) <= 4):
+                cannon.health -= 2*self.attackdamage
+                if(cannon.health <= cannon.maxHealth*2/3):
+                    cannon.color = clr.Fore.YELLOW
+                if(cannon.health <= cannon.maxHealth/3):
+                    cannon.color = clr.Fore.RED
+                if(cannon.health <= 0):
+                    cannon.alive = False
+                    cannon.color = clr.Fore.RESET
+
+        for wizardTower in wizardTowers:
+            if(wizardTower.alive and abs(wizardTower.posX - attackCenter[0]) <= 4 and abs(wizardTower.posY - attackCenter[1]) <= 4):
+                wizardTower.health -= 2*self.attackdamage
+                if(wizardTower.health <= wizardTower.maxHealth*2/3):
+                    wizardTower.color = clr.Fore.YELLOW
+                if(wizardTower.health <= wizardTower.maxHealth/3):
+                    wizardTower.color = clr.Fore.RED
+                if(wizardTower.health <= 0):
+                    wizardTower.alive = False
+                    wizardTower.color = clr.Fore.RESET
+
+        for x in range(townHall.posX, townHall.posX + townHall.sizeX):
+            for y in range(townHall.posY, townHall.posY + townHall.sizeY):
+                if(townHall.alive and abs(attackCenter[0]- x) + abs(attackCenter[1] - y) <= 5):
+                    townHall.health -= 2*self.attackdamage
                     if(townHall.health <= townHall.maxHealth*2/3):
                         townHall.color = clr.Fore.YELLOW
                     if(townHall.health <= townHall.maxHealth/3):

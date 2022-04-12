@@ -1,3 +1,4 @@
+import imp
 from src.screen import *
 from src.king import *
 import colorama as clr
@@ -12,6 +13,8 @@ from src.archer import *
 from src.balloon import *
 from src.queen import *
 from src.wizardTower import *
+from threading import Timer
+import time
 
 #    |
 #  --+-----> X
@@ -153,6 +156,9 @@ while(1):
             break
     if(allWizardTowersDead and allHutsDead and allCannonsDead and not townHall.alive):
         level = level+1
+        os.system('clear')
+        print("You won! On to Level " + str(level) + "!")
+        time.sleep(1)
         numArchers = 0
         numBarbarians = 0
         numBalloons = 0
@@ -227,9 +233,6 @@ while(1):
     # draw all elements
     king.draw(screen)
     walls.draw(screen)
-    for wallsss in walls.wallsArray:
-        print(wallsss.alive, file=sys.stderr)
-    print("--------------------", file=sys.stderr)
     townHall.draw(screen)
     huts.draw(screen)
     for wizardTower in wizardTowers:
@@ -247,6 +250,13 @@ while(1):
     if(inputchar == ' '):
         if(king.alive):
             king.attack(walls, townHall, cannons, huts, wizardTowers)
+    
+    # queen special attack
+    if(inputchar == 'l'):
+        if(king.alive):
+            attackCenter = king.findAttackPositionForQueenSpecialAttack()
+            r = Timer(1.0,king.specialAttack, (walls, townHall, cannons, huts, wizardTowers, attackCenter))
+            r.start()
     for cannon in cannons:
         if(cannon.alive):
             cannon.attack(king, barbarians, archers)

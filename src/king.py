@@ -90,3 +90,6 @@ class King(GameObject):
                     if(townHall.health <= 0):
                         townHall.alive = False
                         townHall.color = clr.Fore.RESET
+
+    def specialAttack(self, walls, townHall, cannons, huts, wizardTowers):
+        pass
