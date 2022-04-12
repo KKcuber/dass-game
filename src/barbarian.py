@@ -76,22 +76,7 @@ class Barbarian(GameObject):
                                 minDistance = abs(self.posX - tower.posX) + abs(self.posY - tower.posY)
 
                 else:
-                    if(self.posX != self.currentTarget.posX):
-                        if(self.posX > self.currentTarget.posX):
-                            if(screen.screenarr[self.posY][self.posX - self.vel] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
-                                self.posX -= self.vel
-                            elif(screen.screenarr[self.posY][self.posX - self.vel][5] == '#'):
-                                self.attackWall = getWallIndex(self.posX - self.vel, self.posY, walls)
-                            elif(screen.screenarr[self.posY][self.posX - self.vel][5] == self.currentTarget.char):
-                                self.attackTarget = True
-                        else:
-                            if(screen.screenarr[self.posY][self.posX + self.vel] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
-                                self.posX += self.vel
-                            elif(screen.screenarr[self.posY][self.posX + self.vel][5] == '#'):
-                                self.attackWall = getWallIndex(self.posX + self.vel, self.posY, walls)
-                            elif(screen.screenarr[self.posY][self.posX + self.vel][5] == self.currentTarget.char):
-                                self.attackTarget = True
-                    elif(self.posY != self.currentTarget.posY):
+                    if(self.posY != self.currentTarget.posY):
                         if(self.posY > self.currentTarget.posY):
                             if(screen.screenarr[self.posY - self.vel][self.posX] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
                                 self.posY -= self.vel
@@ -106,6 +91,22 @@ class Barbarian(GameObject):
                                 self.attackWall = getWallIndex(self.posX, self.posY + self.vel, walls)
                             elif(screen.screenarr[self.posY + self.vel][self.posX][5] == self.currentTarget.char):
                                 self.attackTarget = True
+                    elif(self.posX != self.currentTarget.posX):
+                        if(self.posX > self.currentTarget.posX):
+                            if(screen.screenarr[self.posY][self.posX - self.vel] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
+                                self.posX -= self.vel
+                            elif(screen.screenarr[self.posY][self.posX - self.vel][5] == '#'):
+                                self.attackWall = getWallIndex(self.posX - self.vel, self.posY, walls)
+                            elif(screen.screenarr[self.posY][self.posX - self.vel][5] == self.currentTarget.char):
+                                self.attackTarget = True
+                        else:
+                            if(screen.screenarr[self.posY][self.posX + self.vel] == ' ' or screen.screenarr[self.posY - self.vel][self.posX] == 'B'):
+                                self.posX += self.vel
+                            elif(screen.screenarr[self.posY][self.posX + self.vel][5] == '#'):
+                                self.attackWall = getWallIndex(self.posX + self.vel, self.posY, walls)
+                            elif(screen.screenarr[self.posY][self.posX + self.vel][5] == self.currentTarget.char):
+                                self.attackTarget = True
+                    
             # else:
             #     self.currentTarget.health -= self.attackdamage
             #     if(self.currentTarget.health <= self.currentTarget.maxHealth*2/3):

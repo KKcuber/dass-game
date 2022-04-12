@@ -178,6 +178,7 @@ while(1):
         townHall.alive = True
         king.alive = True
         king.health = king.maxHealth
+        king.color = clr.Fore.BLUE
         townHall.health = townHall.maxHealth
         king.posX = 0
         king.posY = 0

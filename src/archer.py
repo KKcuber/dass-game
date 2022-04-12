@@ -40,7 +40,6 @@ class Archer(GameObject):
 
         # if attacking target then decrease target's health
         elif(self.attackTarget):
-            # print(self.currentTarget.health, file=sys.stderr)
             self.currentTarget.health -= self.attackdamage
             if(self.currentTarget.health <= self.currentTarget.maxHealth*2/3):
                 self.currentTarget.color = clr.Fore.YELLOW
@@ -85,7 +84,6 @@ class Archer(GameObject):
                             minDistance = abs(self.posX - wizardTower.posX) + abs(self.posY - wizardTower.posY)
             # move towards target
             else:
-                print(self.currentTarget.char, self.currentTarget.posX, self.currentTarget.posY, file=sys.stderr)
                 if(manhattanDistance(self, self.currentTarget) > self.range):
                     if(self.posX < self.currentTarget.posX):
                         for i in range(self.posX, self.currentTarget.posX):
