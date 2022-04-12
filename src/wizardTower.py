@@ -9,7 +9,7 @@ def euclideanDistance(x1, y1, x2, y2):
 class WizardTower(GameObject):
     def __init__(self, posX, posY,char, color, health):
         GameObject.__init__(self, posX, posY, char, 1, 1, color, health)
-        self.damage = 3
+        self.damage = 2
         self.currentTarget = None
 
     def attack(self, king, barbarians, archers, balloons):

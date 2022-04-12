@@ -6,7 +6,7 @@ class King(GameObject):
     def __init__(self, posX, posY, char, sizeX, sizeY, color, health):
         GameObject.__init__(self, posX, posY, char, sizeX, sizeY, color, health)
         self.vel = 1
-        self.attackdamage = 10
+        self.attackdamage = 15
 
     def move(self, inputchar, screen, rageSpellActive):
         if(inputchar == 'w'):

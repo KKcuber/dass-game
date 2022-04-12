@@ -17,7 +17,7 @@ class Archer(GameObject):
     def __init__(self, posX, posY, char, sizeX, sizeY, color, health):
         GameObject.__init__(self, posX, posY, char, sizeX, sizeY, color, health)
         self.vel = 1
-        self.attackdamage = 0.5
+        self.attackdamage = 1
         self.currentTarget = None
         self.attackWall = None
         self.attackTarget = False

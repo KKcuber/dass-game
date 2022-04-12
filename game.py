@@ -80,23 +80,23 @@ while(1):
     if(inputchar == 'q'):
         break
     if(inputchar == '1' and numBarbarians < 6):
-        barbarians.append(Barbarian(79, 0, 'B', 1, 1, clr.Fore.BLUE, 30))
+        barbarians.append(Barbarian(79, 0, 'B', 1, 1, clr.Fore.BLUE, 60))
         numBarbarians += 1
     if(inputchar == '2' and numBarbarians < 6):
-        barbarians.append(Barbarian(79, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
+        barbarians.append(Barbarian(79, 24, 'B', 1, 1, clr.Fore.BLUE, 60))
         numBarbarians += 1
     if(inputchar == '3' and numBarbarians < 6):
         barbarians.append(Barbarian(0, 24, 'B', 1, 1, clr.Fore.BLUE, 30))
         numBarbarians += 1
 
     # spawn archers
-    if(inputchar == '4' and numArchers < 6):
+    if(inputchar == '4' and numArchers < 4):
         archers.append(Archer(79, 0, 'A', 1, 1, clr.Fore.BLUE, 30))
         numArchers += 1
-    if(inputchar == '5' and numArchers < 6):
+    if(inputchar == '5' and numArchers < 4):
         archers.append(Archer(79, 24, 'A', 1, 1, clr.Fore.BLUE, 30))
         numArchers += 1
-    if(inputchar == '6' and numArchers < 6):
+    if(inputchar == '6' and numArchers < 4):
         archers.append(Archer(0, 24, 'A', 1, 1, clr.Fore.BLUE, 30))
         numArchers += 1
 
