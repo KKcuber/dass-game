@@ -40,6 +40,7 @@ class Archer(GameObject):
 
         # if attacking target then decrease target's health
         elif(self.attackTarget):
+            # print(self.currentTarget.health, file=sys.stderr)
             self.currentTarget.health -= self.attackdamage
             if(self.currentTarget.health <= self.currentTarget.maxHealth*2/3):
                 self.currentTarget.color = clr.Fore.YELLOW
@@ -84,11 +85,12 @@ class Archer(GameObject):
                             minDistance = abs(self.posX - wizardTower.posX) + abs(self.posY - wizardTower.posY)
             # move towards target
             else:
+                print(self.currentTarget.char, self.currentTarget.posX, self.currentTarget.posY, file=sys.stderr)
                 if(manhattanDistance(self, self.currentTarget) > self.range):
                     if(self.posX < self.currentTarget.posX):
                         for i in range(self.posX, self.currentTarget.posX):
                             if(getWallIndex(i, self.posY, walls) != None):
-                                self.posX = i - 1
+                                # self.posX = i - 1
                                 self.attackWall = getWallIndex(i, self.posY, walls)
                                 break
                         if(self.attackWall == None):
@@ -96,23 +98,23 @@ class Archer(GameObject):
                     elif(self.posX > self.currentTarget.posX):
                         for i in range(self.posX, self.currentTarget.posX, -1):
                             if(getWallIndex(i, self.posY, walls) != None):
-                                self.posX = i + 1
+                                # self.posX = i + 1
                                 self.attackWall = getWallIndex(i, self.posY, walls)
                                 break
                         if(self.attackWall == None):
                             self.posX -= self.vel
                     elif(self.posY < self.currentTarget.posY):
-                        for i in range(self.posY, self.currentTarget.posY):
+                        for i in range(self.posY, self.currentTarget.posY-self.range):
                             if(getWallIndex(self.posX, i, walls) != None):
-                                self.posY = i - 1
+                                # self.posY = i - 1
                                 self.attackWall = getWallIndex(self.posX, i, walls)
                                 break
                         if(self.attackWall == None):
                             self.posY += self.vel
                     elif(self.posY > self.currentTarget.posY):
-                        for i in range(self.posY, self.currentTarget.posY, -1):
+                        for i in range(self.posY-self.range, self.currentTarget.posY, -1):
                             if(getWallIndex(self.posX, i, walls) != None):
-                                self.posY = i + 1
+                                # self.posY = i + 1
                                 self.attackWall = getWallIndex(self.posX, i, walls)
                                 break
                         if(self.attackWall == None):

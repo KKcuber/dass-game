@@ -168,16 +168,22 @@ while(1):
         barbarians.clear()
         for hut in huts.hutsArray:
             hut.alive = True
+            hut.health = hut.maxHealth
         for cannon in cannons:
             cannon.alive = True
+            cannon.health = cannon.maxHealth
         for wizardTower in wizardTowers:
             wizardTower.alive = True
+            wizardTower.health = wizardTower.maxHealth
         townHall.alive = True
         king.alive = True
         king.health = king.maxHealth
+        townHall.health = townHall.maxHealth
         king.posX = 0
         king.posY = 0
         walls.revive()
+        rageSpellTime = None
+
         if(level == 2):
             cannons.append(Cannon(39,9, 'C', clr.Fore.GREEN, 200))
             wizardTowers.append(WizardTower(32, 17, 'W', clr.Fore.GREEN, 200))
@@ -195,10 +201,36 @@ while(1):
     # heal spell heals all troops - barbarians and king and increases health by 150% capped at max Health
     if(inputchar == 'h'):
         king.health = min(king.health + king.maxHealth/2, king.maxHealth)
+        if(king.health >= king.maxHealth*2/3):
+            king.color = clr.Fore.BLUE
+        elif(king.health >= king.maxHealth/3):
+            king.color = clr.Fore.YELLOW
+        else:
+            king.color = clr.Fore.RED
         for barbarian in barbarians:
             barbarian.health = min(barbarian.health + barbarian.maxHealth/2, barbarian.maxHealth)
+            if(barbarian.health >= barbarian.maxHealth*2/3):
+                barbarian.color = clr.Fore.BLUE
+            elif(barbarian.health >= barbarian.maxHealth/3):
+                barbarian.color = clr.Fore.YELLOW
+            else:
+                barbarian.color = clr.Fore.RED
         for archer in archers:
             archer.health = min(archer.health + archer.maxHealth/2, archer.maxHealth)
+            if(archer.health >= archer.maxHealth*2/3):
+                archer.color = clr.Fore.BLUE
+            elif(archer.health >= archer.maxHealth/3):
+                archer.color = clr.Fore.YELLOW
+            else:
+                archer.color = clr.Fore.RED
+        for balloon in balloons:
+            balloon.health = min(balloon.health + balloon.maxHealth/2, balloon.maxHealth)
+            if(balloon.health >= balloon.maxHealth*2/3):
+                balloon.color = clr.Fore.BLUE
+            elif(balloon.health >= balloon.maxHealth/3):
+                balloon.color = clr.Fore.YELLOW
+            else:
+                balloon.color = clr.Fore.RED
 
     # rage spell - doubles damage and movement speed for 3 senconds
     if(inputchar == 'r'):

@@ -1,6 +1,6 @@
 # Clash of Clans 
 
-- A Terminal Based game based on the popular game of Clash of Clans 
+ A Terminal Based game based on the popular game of Clash of Clans 
 
 ### To run the game
 1. Go into the main directory where game.py is present
